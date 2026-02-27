@@ -1,0 +1,66 @@
+:root {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  color-scheme: light dark;
+  --color-accent: #535bf2;
+  --color-heading: rgba(255, 255, 255, 0.95);
+  --color-text: rgba(255, 255, 255, 0.87);
+  --color-muted: rgba(255, 255, 255, 0.6);
+  --color-border: rgba(255, 255, 255, 0.2);
+  --color-bg: #242424;
+  --color-bg-soft: #1a1a1a;
+  --color-error: #f87171;
+  --color-success: #4ade80;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-accent: #4f46e5;
+    --color-heading: #111827;
+    --color-text: #374151;
+    --color-muted: #6b7280;
+    --color-border: #d1d5db;
+    --color-bg: #ffffff;
+    --color-bg-soft: #f3f4f6;
+    --color-error: #dc2626;
+    --color-success: #16a34a;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+a {
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: inherit;
+}
+a:hover {
+  opacity: 0.9;
+}
+
+button {
+  font-family: inherit;
+}
