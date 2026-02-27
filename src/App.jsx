@@ -57,6 +57,13 @@ function App() {
     startedAt,
   })
 
+  // Al cambiar de paso o sección, scroll al inicio de la página
+  useEffect(() => {
+    if (step !== STEP_INTRO) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [step, currentSection])
+
   const section = sections[currentSection]
   const totalSections = sections.length
   const sectionResponses = responses[section?.id] ?? {}
@@ -141,6 +148,14 @@ function App() {
     )
   }
 
+  const handleStartOver = () => {
+    setResponses(getInitialResponses())
+    setCurrentSection(0)
+    setStartedAt(null)
+    setStep(STEP_INTRO)
+    clearStoredState()
+  }
+
   if (step === STEP_SUMMARY) {
     return (
       <div className="layout-container flex h-full min-h-screen flex-col bg-background-light dark:bg-background-dark">
@@ -149,6 +164,7 @@ function App() {
           <Summary
             responses={responses}
             onSend={handleSendBrief}
+            onStartOver={handleStartOver}
             sending={sending}
             sendError={sendError}
             sendSuccess={sendSuccess}
