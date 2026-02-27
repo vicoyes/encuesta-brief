@@ -131,6 +131,8 @@ function App() {
     if (currentSection < totalSections - 1) {
       setCurrentSection((s) => s + 1)
     } else {
+      setSendSuccess(null)
+      setSendError(null)
       setStep(STEP_SUMMARY)
     }
   }
@@ -190,6 +192,8 @@ function App() {
     setResponses(getInitialResponses())
     setCurrentSection(0)
     setStartedAt(null)
+    setSendSuccess(null)
+    setSendError(null)
     setStep(STEP_INTRO)
     clearStoredState()
   }

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { sections } from '../data/sections'
 import Modal from './Modal'
 
@@ -11,13 +12,30 @@ const SECTION_STYLES = [
 ]
 
 function Summary({ responses, onSend, onStartOver, sending, sendError, sendSuccess }) {
+  const [showConfirmSend, setShowConfirmSend] = useState(false)
+
+  const handleConfirmSend = () => {
+    setShowConfirmSend(false)
+    onSend()
+  }
+
   return (
     <div className="flex flex-1 py-8 px-4 sm:px-6 lg:px-8">
+      {showConfirmSend && (
+        <Modal
+          title="Confirmar envío"
+          message="Revisa que todo esté correcto en el resumen de arriba. Al confirmar, se enviarán tus respuestas a nuestro equipo."
+          onClose={() => setShowConfirmSend(false)}
+          confirmText="Sí, enviar"
+          onConfirm={handleConfirmSend}
+        />
+      )}
       {sendSuccess && (
         <Modal
           variant="success"
           title="¡Brief enviado!"
-          message={sendSuccess}
+          message="Brief enviado correctamente. ¡Gracias! Será procesado y revisado por nuestro equipo. Pronto nos comunicaremos con usted."
+          buttonText="Cerrar"
           onClose={onStartOver}
         />
       )}
@@ -116,7 +134,7 @@ function Summary({ responses, onSend, onStartOver, sending, sendError, sendSucce
             </button>
             <button
             type="button"
-            onClick={onSend}
+            onClick={() => setShowConfirmSend(true)}
             disabled={sending}
             aria-busy={sending}
             className="order-1 sm:order-2 inline-flex items-center justify-center rounded-xl bg-slate-900 dark:bg-white px-8 py-3 text-sm font-semibold text-white dark:text-slate-900 shadow-lg shadow-slate-200 dark:shadow-slate-800 hover:bg-slate-800 dark:hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
