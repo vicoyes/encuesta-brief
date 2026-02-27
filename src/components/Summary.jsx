@@ -1,6 +1,7 @@
 import { sections } from '../data/sections'
 
 const SECTION_STYLES = [
+  { border: 'bg-slate-500', icon: '📋', iconBg: 'bg-slate-100 dark:bg-slate-800', iconColor: 'text-slate-600 dark:text-slate-400' },
   { border: 'bg-primary', icon: '🧬', iconBg: 'bg-blue-50 dark:bg-blue-900/30', iconColor: 'text-primary' },
   { border: 'bg-emerald-500', icon: '🎨', iconBg: 'bg-emerald-50 dark:bg-emerald-900/30', iconColor: 'text-emerald-600 dark:text-emerald-400' },
   { border: 'bg-amber-500', icon: '📦', iconBg: 'bg-amber-50 dark:bg-amber-900/30', iconColor: 'text-amber-600 dark:text-amber-400' },

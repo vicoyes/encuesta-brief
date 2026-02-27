@@ -5,6 +5,51 @@
 
 export const sections = [
   {
+    id: 'contacto',
+    title: 'Datos de la empresa y contacto',
+    shortLabel: 'Contacto',
+    objective: 'Para poder responder y dar seguimiento a tu brief.',
+    proTip: 'Usaremos estos datos solo para contactarte sobre este proyecto. No los compartimos con terceros.',
+    questions: [
+      {
+        id: 'nombre_empresa',
+        text: 'Nombre de la empresa o proyecto',
+        type: 'text',
+        placeholder: 'Ej: Mi Marca S.L.',
+      },
+      {
+        id: 'nombre_contacto',
+        text: 'Nombre del contacto (persona que responde)',
+        type: 'text',
+        placeholder: 'Ej: María García',
+      },
+      {
+        id: 'email',
+        text: 'Email de contacto',
+        type: 'text',
+        placeholder: 'ejemplo@empresa.com',
+      },
+      {
+        id: 'telefono',
+        text: 'Teléfono (opcional)',
+        type: 'text',
+        placeholder: '+34 600 000 000',
+      },
+      {
+        id: 'cargo',
+        text: 'Cargo o rol en la empresa (opcional)',
+        type: 'text',
+        placeholder: 'Ej: Directora de Marketing',
+      },
+      {
+        id: 'sitio_web_actual',
+        text: 'Sitio web actual (si tienen)',
+        type: 'text',
+        placeholder: 'https://...',
+      },
+    ],
+  },
+  {
     id: 'adn',
     title: 'ADN y Corazón de la Marca',
     shortLabel: 'Identidad',
