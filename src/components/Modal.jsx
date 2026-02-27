@@ -1,4 +1,5 @@
-function Modal({ title, message, onClose }) {
+function Modal({ title, message, onClose, variant = 'default' }) {
+  const isSuccess = variant === 'success'
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50"
@@ -8,21 +9,32 @@ function Modal({ title, message, onClose }) {
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
-        className="bg-white dark:bg-slate-800 rounded-xl shadow-xl max-w-md w-full p-6 border border-slate-200 dark:border-slate-700"
+        className={`bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full border border-slate-200 dark:border-slate-700 ${
+          isSuccess ? 'max-w-lg p-8' : 'max-w-md p-6'
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 id="modal-title" className="text-lg font-bold text-slate-900 dark:text-white mb-3">
+        <h2
+          id="modal-title"
+          className={`font-bold text-slate-900 dark:text-white mb-4 whitespace-pre-line ${
+            isSuccess ? 'text-2xl sm:text-3xl text-center' : 'text-lg mb-3'
+          }`}
+        >
           {title}
         </h2>
-        <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6 whitespace-pre-line">
+        <p
+          className={`text-slate-600 dark:text-slate-300 leading-relaxed mb-6 whitespace-pre-line ${
+            isSuccess ? 'text-lg sm:text-xl text-center' : 'text-sm mb-6'
+          }`}
+        >
           {message}
         </p>
         <button
           type="button"
           onClick={onClose}
-          className="w-full py-2.5 px-4 rounded-lg bg-primary text-white font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-800"
+          className="w-full py-3 px-4 rounded-lg bg-primary text-white font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-800"
         >
-          Entendido
+          {isSuccess ? 'Cerrar' : 'Entendido'}
         </button>
       </div>
     </div>

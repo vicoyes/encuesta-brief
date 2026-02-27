@@ -1,4 +1,5 @@
 import { sections } from '../data/sections'
+import Modal from './Modal'
 
 const SECTION_STYLES = [
   { border: 'bg-slate-500', icon: '📋', iconBg: 'bg-slate-100 dark:bg-slate-800', iconColor: 'text-slate-600 dark:text-slate-400' },
@@ -12,6 +13,14 @@ const SECTION_STYLES = [
 function Summary({ responses, onSend, onStartOver, sending, sendError, sendSuccess }) {
   return (
     <div className="flex flex-1 py-8 px-4 sm:px-6 lg:px-8">
+      {sendSuccess && (
+        <Modal
+          variant="success"
+          title="¡Brief enviado!"
+          message={sendSuccess}
+          onClose={onStartOver}
+        />
+      )}
       <div className="mx-auto w-full max-w-5xl">
         {/* Page Header */}
         <div className="mb-10">
