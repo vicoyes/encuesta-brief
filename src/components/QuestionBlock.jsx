@@ -1,5 +1,5 @@
 function QuestionBlock({ question, value, onChange }) {
-  const { id, text, type, placeholder } = question
+  const { id, text, type, placeholder, required } = question
   const isTextarea = type === 'textarea'
 
   return (
@@ -7,6 +7,7 @@ function QuestionBlock({ question, value, onChange }) {
       <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
         <label htmlFor={id} className="block text-sm font-semibold text-slate-800 dark:text-slate-200">
           {text}
+          {required && <span className="text-red-500 dark:text-red-400 ml-1" aria-label="obligatorio">*</span>}
         </label>
         {placeholder && (
           <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{placeholder}</p>

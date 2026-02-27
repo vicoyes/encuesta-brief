@@ -16,18 +16,21 @@ export const sections = [
         text: 'Nombre de la empresa o proyecto',
         type: 'text',
         placeholder: 'Ej: Mi Marca S.L.',
+        required: true,
       },
       {
         id: 'nombre_contacto',
         text: 'Nombre del contacto (persona que responde)',
         type: 'text',
         placeholder: 'Ej: María García',
+        required: true,
       },
       {
         id: 'email',
         text: 'Email de contacto',
         type: 'text',
         placeholder: 'ejemplo@empresa.com',
+        required: true,
       },
       {
         id: 'telefono',
@@ -61,6 +64,7 @@ export const sections = [
         text: 'Elevator Pitch: ¿A qué se dedica la empresa en una sola frase?',
         type: 'text',
         placeholder: 'Ej: Somos una agencia que crea sitios web que venden.',
+        required: true,
       },
       {
         id: 'origen',

@@ -8,6 +8,7 @@ import ProgressBar from './components/ProgressBar'
 import SectionIntro from './components/SectionIntro'
 import QuestionBlock from './components/QuestionBlock'
 import Summary from './components/Summary'
+import Modal from './components/Modal'
 import './App.css'
 
 const STEP_INTRO = 'intro'
@@ -41,6 +42,7 @@ function App() {
   const [sending, setSending] = useState(false)
   const [sendError, setSendError] = useState(null)
   const [sendSuccess, setSendSuccess] = useState(null)
+  const [modal, setModal] = useState({ open: false, title: '', message: '' })
 
   useEffect(() => {
     const stored = getStoredState()
@@ -99,7 +101,33 @@ function App() {
     }))
   }
 
+  function getMissingRequiredInSection(sectionIndex) {
+    const sec = sections[sectionIndex]
+    if (!sec) return []
+    const res = responses[sec.id] ?? {}
+    return sec.questions
+      .filter((q) => q.required && (!res[q.id] || String(res[q.id]).trim() === ''))
+      .map((q) => q.text)
+  }
+
+  function getMissingRequiredAll() {
+    const missing = []
+    sections.forEach((sec, i) => {
+      getMissingRequiredInSection(i).forEach((label) => missing.push({ section: sec.title, label }))
+    })
+    return missing
+  }
+
   const goNext = () => {
+    const missing = getMissingRequiredInSection(currentSection)
+    if (missing.length > 0) {
+      setModal({
+        open: true,
+        title: 'Campos obligatorios',
+        message: `Por favor completa los siguientes campos antes de continuar:\n\n• ${missing.join('\n• ')}`,
+      })
+      return
+    }
     if (currentSection < totalSections - 1) {
       setCurrentSection((s) => s + 1)
     } else {
@@ -116,6 +144,16 @@ function App() {
   }
 
   const handleSendBrief = async () => {
+    const missing = getMissingRequiredAll()
+    if (missing.length > 0) {
+      const lines = missing.map((m) => `• ${m.label} (${m.section})`)
+      setModal({
+        open: true,
+        title: 'Campos obligatorios',
+        message: `Para enviar el brief, completa estos campos:\n\n${lines.join('\n')}`,
+      })
+      return
+    }
     setSendError(null)
     setSendSuccess(null)
     setSending(true)
@@ -159,6 +197,13 @@ function App() {
   if (step === STEP_SUMMARY) {
     return (
       <div className="layout-container flex h-full min-h-screen flex-col bg-background-light dark:bg-background-dark">
+        {modal.open && (
+          <Modal
+            title={modal.title}
+            message={modal.message}
+            onClose={() => setModal((m) => ({ ...m, open: false }))}
+          />
+        )}
         <Header />
         <main className="flex flex-1 flex-col">
           <Summary
@@ -181,6 +226,13 @@ function App() {
 
   return (
     <div className="layout-container flex h-full min-h-screen flex-col bg-background-light dark:bg-background-dark">
+      {modal.open && (
+        <Modal
+          title={modal.title}
+          message={modal.message}
+          onClose={() => setModal((m) => ({ ...m, open: false }))}
+        />
+      )}
       <Header />
       <main className="flex flex-1 flex-col py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-[960px] mx-auto flex flex-col gap-8">
