@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react'
 import { sections } from './data/sections'
 import { getStoredState, useLocalStorage, clearStoredState } from './hooks/useLocalStorage'
 import { sendToWebhook } from './utils/sendToWebhook'
+import Header from './components/Header'
 import Intro from './components/Intro'
 import ProgressBar from './components/ProgressBar'
-import SectionTitle from './components/SectionTitle'
+import SectionIntro from './components/SectionIntro'
 import QuestionBlock from './components/QuestionBlock'
 import Summary from './components/Summary'
 import './App.css'
@@ -34,7 +35,6 @@ function mergeStoredResponses(empty, stored) {
 function App() {
   const [step, setStep] = useState(STEP_INTRO)
   const [currentSection, setCurrentSection] = useState(0)
-  const [currentQuestion, setCurrentQuestion] = useState(0)
   const [responses, setResponses] = useState(getInitialResponses)
   const [startedAt, setStartedAt] = useState(null)
   const [hasSavedProgress, setHasSavedProgress] = useState(false)
@@ -46,43 +46,34 @@ function App() {
     const stored = getStoredState()
     if (stored) {
       setResponses((prev) => mergeStoredResponses(prev, stored.responses))
-      setHasSavedProgress(
-        stored.currentSection > 0 || (stored.currentSection === 0 && stored.currentQuestion > 0)
-      )
+      setHasSavedProgress((stored.currentSection ?? 0) > 0)
     }
   }, [])
 
   useLocalStorage({
     responses: step === STEP_INTRO ? undefined : responses,
     currentSection: step === STEP_INTRO ? undefined : currentSection,
-    currentQuestion: step === STEP_INTRO ? undefined : currentQuestion,
+    currentQuestion: 0,
     startedAt,
   })
 
   const section = sections[currentSection]
   const totalSections = sections.length
-  const questions = section?.questions ?? []
-  const totalQuestionsInSection = questions.length
-  const question = questions[currentQuestion]
   const sectionResponses = responses[section?.id] ?? {}
 
   const handleStart = (fromContinue = false) => {
     if (!fromContinue) {
       setResponses(getInitialResponses())
       setCurrentSection(0)
-      setCurrentQuestion(0)
       setStartedAt(new Date().toISOString())
       setStep(0)
     } else {
       const stored = getStoredState()
       if (stored) {
-        const sectionIdx = Math.min(stored.currentSection ?? 0, sections.length - 1)
-        const section = sections[sectionIdx]
-        const questionIdx = Math.min(stored.currentQuestion ?? 0, section ? section.questions.length - 1 : 0)
-        setCurrentSection(sectionIdx)
-        setCurrentQuestion(questionIdx)
+        const idx = Math.min(stored.currentSection ?? 0, sections.length - 1)
+        setCurrentSection(idx)
         if (stored.startedAt) setStartedAt(stored.startedAt)
-        setStep(sectionIdx)
+        setStep(idx)
       } else {
         setStep(0)
       }
@@ -102,23 +93,16 @@ function App() {
   }
 
   const goNext = () => {
-    if (currentQuestion < totalQuestionsInSection - 1) {
-      setCurrentQuestion((q) => q + 1)
-    } else if (currentSection < totalSections - 1) {
+    if (currentSection < totalSections - 1) {
       setCurrentSection((s) => s + 1)
-      setCurrentQuestion(0)
     } else {
       setStep(STEP_SUMMARY)
     }
   }
 
   const goPrev = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion((q) => q - 1)
-    } else if (currentSection > 0) {
+    if (currentSection > 0) {
       setCurrentSection((s) => s - 1)
-      const prevSection = sections[currentSection - 1]
-      setCurrentQuestion(prevSection.questions.length - 1)
     } else {
       setStep(STEP_INTRO)
     }
@@ -148,55 +132,83 @@ function App() {
 
   if (step === STEP_INTRO) {
     return (
-      <main className="app">
-        <Intro onStart={() => handleStart(false)} onContinue={handleContinue} hasSavedProgress={hasSavedProgress} />
-      </main>
+      <div className="layout-container flex h-full min-h-screen flex-col bg-background-light dark:bg-background-dark">
+        <Header />
+        <main className="flex flex-1 flex-col">
+          <Intro onStart={() => handleStart(false)} onContinue={handleContinue} hasSavedProgress={hasSavedProgress} />
+        </main>
+      </div>
     )
   }
 
   if (step === STEP_SUMMARY) {
     return (
-      <main className="app">
-        <Summary
-          responses={responses}
-          onSend={handleSendBrief}
-          sending={sending}
-          sendError={sendError}
-          sendSuccess={sendSuccess}
-        />
-      </main>
+      <div className="layout-container flex h-full min-h-screen flex-col bg-background-light dark:bg-background-dark">
+        <Header />
+        <main className="flex flex-1 flex-col">
+          <Summary
+            responses={responses}
+            onSend={handleSendBrief}
+            sending={sending}
+            sendError={sendError}
+            sendSuccess={sendSuccess}
+          />
+        </main>
+      </div>
     )
   }
 
+  const nextLabel =
+    currentSection < totalSections - 1
+      ? `Siguiente: ${sections[currentSection + 1]?.shortLabel ?? sections[currentSection + 1]?.title ?? 'Siguiente'}`
+      : 'Ver resumen'
+
   return (
-    <main className="app">
-      <ProgressBar
-        currentSection={currentSection}
-        totalSections={totalSections}
-        currentQuestion={currentQuestion}
-        totalQuestionsInSection={totalQuestionsInSection}
-      />
-      <div className="survey">
-        <SectionTitle title={section.title} objective={section.objective} />
-        {question && (
-          <QuestionBlock
-            question={question}
-            value={sectionResponses[question.id]}
-            onChange={setAnswer}
+    <div className="layout-container flex h-full min-h-screen flex-col bg-background-light dark:bg-background-dark">
+      <Header />
+      <main className="flex flex-1 flex-col py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[960px] mx-auto flex flex-col gap-8">
+          <ProgressBar currentSection={currentSection} totalSections={totalSections} />
+
+          <SectionIntro
+            title={section.title}
+            objective={section.objective}
+            proTip={section.proTip}
           />
-        )}
-        <nav className="survey__nav" aria-label="Navegación del cuestionario">
-          <button type="button" className="btn btn--secondary" onClick={goPrev}>
-            Anterior
-          </button>
-          <button type="button" className="btn btn--primary" onClick={goNext}>
-            {currentQuestion < totalQuestionsInSection - 1 || currentSection < totalSections - 1
-              ? 'Siguiente'
-              : 'Ver resumen'}
-          </button>
-        </nav>
-      </div>
-    </main>
+
+          <div className="flex flex-col gap-6 pb-4">
+            {section.questions.map((q) => (
+              <QuestionBlock
+                key={q.id}
+                question={q}
+                value={sectionResponses[q.id]}
+                onChange={setAnswer}
+              />
+            ))}
+          </div>
+
+          <nav
+            className="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-700"
+            aria-label="Navegación"
+          >
+            <button
+              type="button"
+              onClick={goPrev}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              Anterior
+            </button>
+            <button
+              type="button"
+              onClick={goNext}
+              className="flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-white text-sm font-medium hover:opacity-90 transition-opacity"
+            >
+              {nextLabel}
+            </button>
+          </nav>
+        </div>
+      </main>
+    </div>
   )
 }
 

@@ -7,7 +7,9 @@ export const sections = [
   {
     id: 'adn',
     title: 'ADN y Corazón de la Marca',
+    shortLabel: 'Identidad',
     objective: 'Entender la esencia para que el copy no suene genérico.',
+    proTip: 'Sé lo más concreto posible. "Vendemos café" es un dato. "Creamos rituales matutinos para soñadores con prisa" es una marca.',
     questions: [
       {
         id: 'elevator_pitch',
@@ -68,7 +70,9 @@ export const sections = [
   {
     id: 'imagen',
     title: 'Imagen Corporativa y Estética',
+    shortLabel: 'Imagen',
     objective: 'Definir el lenguaje visual del proyecto.',
+    proTip: 'Las referencias visuales nos ayudan a alinear expectativas. No tienen que ser de tu sector, sino del estilo que te gusta.',
     questions: [
       {
         id: 'identidad_actual',
@@ -99,7 +103,9 @@ export const sections = [
   {
     id: 'servicios',
     title: 'Radiografía de Servicios (El Motor de Venta)',
+    shortLabel: 'Servicios',
     objective: 'Transformar características técnicas en beneficios reales.',
+    proTip: 'Piensa en el antes y el después del cliente. Eso es lo que vendemos: la transformación, no solo el servicio.',
     questions: [
       {
         id: 'listado_servicios',
@@ -136,7 +142,9 @@ export const sections = [
   {
     id: 'arquitectura',
     title: 'Arquitectura y Estrategia de Contenido',
+    shortLabel: 'Contenido',
     objective: 'Definir el mapa del sitio y la voz de la marca.',
+    proTip: 'Un solo objetivo de conversión claro hace que la web sea más efectiva. Menos es más.',
     questions: [
       {
         id: 'mapa_sitio',
@@ -179,7 +187,9 @@ export const sections = [
   {
     id: 'logistica',
     title: 'Logística y Datos Técnicos',
+    shortLabel: 'Logística',
     objective: 'Viabilidad técnica y plazos.',
+    proTip: 'Si no tienes dominio o hosting, lo indicamos en el brief para recomendarte opciones.',
     questions: [
       {
         id: 'infraestructura',

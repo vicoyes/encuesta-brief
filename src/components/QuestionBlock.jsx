@@ -3,36 +3,36 @@ function QuestionBlock({ question, value, onChange }) {
   const isTextarea = type === 'textarea'
 
   return (
-    <div className="question-block">
-      <label htmlFor={id} className="question-block__label">
-        {text}
-      </label>
-      {isTextarea ? (
-        <textarea
-          id={id}
-          className="question-block__input question-block__input--textarea"
-          value={value ?? ''}
-          onChange={(e) => onChange(id, e.target.value)}
-          placeholder={placeholder}
-          rows={4}
-          aria-describedby={placeholder ? `${id}-hint` : undefined}
-        />
-      ) : (
-        <input
-          type="text"
-          id={id}
-          className="question-block__input"
-          value={value ?? ''}
-          onChange={(e) => onChange(id, e.target.value)}
-          placeholder={placeholder}
-          aria-describedby={placeholder ? `${id}-hint` : undefined}
-        />
-      )}
-      {placeholder && (
-        <span id={`${id}-hint`} className="question-block__hint">
-          {placeholder}
-        </span>
-      )}
+    <div className="bg-white dark:bg-[#15202b] rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50 transition-all">
+      <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+        <label htmlFor={id} className="block text-sm font-semibold text-slate-800 dark:text-slate-200">
+          {text}
+        </label>
+        {placeholder && (
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{placeholder}</p>
+        )}
+      </div>
+      <div className="p-4 sm:p-5">
+        {isTextarea ? (
+          <textarea
+            id={id}
+            className="w-full min-h-[120px] px-3 py-2.5 text-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-slate-800 dark:text-slate-200 placeholder:text-slate-400 resize-y"
+            value={value ?? ''}
+            onChange={(e) => onChange(id, e.target.value)}
+            placeholder={placeholder}
+            rows={4}
+          />
+        ) : (
+          <input
+            type="text"
+            id={id}
+            className="w-full px-3 py-2.5 text-sm bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-slate-800 dark:text-slate-200 placeholder:text-slate-400"
+            value={value ?? ''}
+            onChange={(e) => onChange(id, e.target.value)}
+            placeholder={placeholder}
+          />
+        )}
+      </div>
     </div>
   )
 }
